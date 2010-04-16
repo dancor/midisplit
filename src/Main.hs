@@ -21,15 +21,12 @@ splitTrack = filter (not . null) . splitTrackAccum [] where
 doFile :: String -> IO ()
 doFile file = do
   when (not $ ".mid" `isSuffixOf` file) $ error "i only like .mid right now"
-  --fileDir = (\ x -> if null x then "." else x) $ takeDirectory file
   let fileName = takeBaseName file
   res <- try $ importFile file
   case res of
-    Left err ->
-      hPutStrLn stderr $ file ++ ": error: " ++ show (err :: IOException)
+    Left err -> hPutStrLn stderr $ file ++ ": error: " ++ show err
     Right res -> case res of
-      Left err ->
-        hPutStrLn stderr $ file ++ ": error: " ++ err
+      Left err -> hPutStrLn stderr $ file ++ ": error: " ++ err
       Right (Midi fileType timeDiv [tempo:time:track]) -> do
         let
           trackMain = init track
