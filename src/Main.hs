@@ -14,8 +14,8 @@ splitTrack = filter (not . null) . splitTrackAccum [] where
   splitTrackAccum :: Track Ticks -> Track Ticks -> [Track Ticks]
   splitTrackAccum accum [] = [accum]
   splitTrackAccum accum (m@(time, change):ms) =
-    if time > 100 * 1000
-      then [accum] ++ splitTrackAccum [(0, change)] ms
+    if time > 15 * 1000
+      then accum : splitTrackAccum [(0, change)] ms
       else splitTrackAccum (accum ++ [m]) ms
 
 doFile :: String -> IO ()
@@ -35,7 +35,7 @@ doFile file = do
           tracks' = map (\ t -> [tempo, time] ++ t ++ [trackEnd]) tracks
           mids = map (Midi fileType timeDiv . (:[])) tracks'
         when (null mids) . hPutStrLn stderr $ file ++ ": no tracks"
-        sequence_ $ zipWith
+        zipWithM_
           (\ i -> exportFile (fileName ++ "-" ++ show i ++ ".mid")) [1..] mids
       Right (Midi _fileType _timeDiv tracks) ->
         hPutStrLn stderr $
