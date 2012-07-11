@@ -5,7 +5,7 @@ license-file:   LICENSE
 author:         dan corson <danl@alum.mit.edu>
 synopsis:       split midi files at long periods of silence
 build-type:     Simple
-build-depends:  FUtil, HCodecs, base, filepath, haskell98
+build-depends:  FUtil, HCodecs, base, filepath
 
 executable:     midisplit
 main-is:        Main.hs

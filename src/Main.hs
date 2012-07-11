@@ -24,7 +24,8 @@ doFile file = do
   let fileName = takeBaseName file
   res <- try $ importFile file
   case res of
-    Left err -> hPutStrLn stderr $ file ++ ": error: " ++ show err
+    Left err -> hPutStrLn stderr $ file ++ ": error: " ++
+      show (err :: IOException)
     Right res -> case res of
       Left err -> hPutStrLn stderr $ file ++ ": error: " ++ err
       Right (Midi fileType timeDiv [tempo:time:track]) -> do
